@@ -19,21 +19,37 @@
 	ClearStates();
  }
  
+ // rendering function to pass to other thread
+ void renderingThread(sf::RenderWindow* window)
+ {
+	while(window->isOpen())
+	{
+		//draw stuff!
+		window.draw
+		//end of frame
+		window->display();
+	}
+ }
  
  // Start - Initialize gameWindow and start the main game loop
  void Game::Start()
  {
- 
+	
 	// Start some stuff...
-	vidW = 1024;
-	vidH = 768;
+	_vidW = 1024;
+	_vidH = 768;
 	
 	// Set first game state...
 	Uninitialized* unitState = new Uninitialized();
 	_gameStates.push_back(unitState);
 	_currentState = unitState;
 	
-	window.create(sf::VideoMode(vidW, vidH), "Game");
+	window.create(sf::VideoMode(_vidW, _vidH), "Game");
+	
+	// launch a rendering thread
+	window.setActive(false); // deactivate openGL context for multithreading
+	sf::Thread thread(&renderingThread, &window);
+	thread.launch();
 	
 	Game::Loop();
 	
@@ -51,6 +67,7 @@
 		// do stuff, yeah?
 		sf::Event event;
 		
+		// event handling logic
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -91,3 +108,4 @@
 		
 		std::cout << std::endl << "Gamestates cleared" << std::endl;
  }
+ 

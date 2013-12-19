@@ -13,6 +13,7 @@
  Uninitialized::Uninitialized()
  {
 	_name = "uninitialized";
+	loadAssets("data/unit.txt");
  }
  
  Uninitialized::~Uninitialized()

@@ -10,6 +10,10 @@
  */
  
  #include <string>
+ #include <vector>
+ #include <memory>
+ 
+ #include <SFML/Graphics.hpp>
  
  class GameState {
  
@@ -17,12 +21,16 @@
 	GameState();
 	virtual ~GameState();
  
+	void loadAssets(std::string filenames);
+	
+	
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
 	std::string GetName();
 	
 protected:
 	std::string _name;
+	std::unique_ptr<sf::Texture> _textures;
 	
  private:
 	// private stuff

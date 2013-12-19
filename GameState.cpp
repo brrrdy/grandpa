@@ -32,8 +32,8 @@
 		while (!gfxFiles.eof())
 		{
 			// get filename
-			std::string fname;
-			if (gfxFiles >> fname >> std::ws)
+			std::string tname, fname;
+			if (gfxFiles >> tname >> fname >> std::ws)
 			{
 			
 				std::cout << "Loading file: " << fname << std::endl;
@@ -47,13 +47,13 @@
 				else 
 				{
 					// add new texture to texture list
-					// do something
+					_textures.insert( std::pair<std::string, sf::Texture&>(tname, newTexture) );
 				}
 			}
 			else
 			{ 
 				// somethin f'd up
-				std::cout << "Cannot read : " << filenames << std::endl;
+				std::cout << "Cannot read: " << filenames << std::endl;
 			}
 			
 		}

@@ -13,7 +13,8 @@
  
  #include "GameState.hpp"
  
-  #include <SFML/Window.hpp>
+ #include <SFML/Graphics.hpp>
+ #include <SFML/Window.hpp>
  
 class Game {
 
@@ -28,13 +29,13 @@ private:
 	void ChangeState(GameState* newGameState);
 	void ClearStates();
 	
-	unsigned int vidW;
-	unsigned int vidH;
+	unsigned int _vidW;
+	unsigned int _vidH;
 	std::vector<GameState*> _gameStates;
 	GameState* _currentState;
 	bool _exiting;
 	// TODO gameWorld/gameWindow objects
-	sf::Window window;
+	sf::RenderWindow window;
 
 	
 };

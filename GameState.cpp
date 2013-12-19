@@ -5,6 +5,9 @@
  *	Desc:		GameState class implementation file
  */
  
+ #include <fstream>
+ #include <iostream>
+ 
  #include "GameState.hpp"
  
  GameState::GameState()
@@ -14,6 +17,52 @@
  
  GameState::~GameState()
  {
+ }
+ 
+ void GameState::loadAssets(std::string filenames)
+ {
+	// input file stream
+	std::ifstream gfxFiles(filenames.c_str());
+	
+	if (gfxFiles.is_open())
+	{
+		std::cout << "File opened for reading: " << filenames << std::endl;
+		
+		// read until EOF
+		while (!gfxFiles.eof())
+		{
+			// get filename
+			std::string fname;
+			if (gfxFiles >> fname >> std::ws)
+			{
+			
+				std::cout << "Loading file: " << fname << std::endl;
+				
+				// attempt to create texture
+				sf::Texture newTexture;
+				if (!newTexture.loadFromFile(fname))
+				{
+					// err: file not found: fname!
+				}
+				else 
+				{
+					// add new texture to texture list
+					// do something
+				}
+			}
+			else
+			{ 
+				// somethin f'd up
+				std::cout << "Cannot read : " << filenames << std::endl;
+			}
+			
+		}
+	}
+	else
+		std::cout << "Cannot open file: "<< filenames << std::endl;
+	
+	// close file stream
+	gfxFiles.close();
  }
  
  std::string GameState::GetName()

@@ -33,14 +33,17 @@
 	else
 		std::cout << "Texture loaded.\n";
 	
-	//set alpha channel for texture
-	
+	//set smoothing level for texture
+	it->second.setSmooth(true);
 	
 	// make a test sprite from "skullman"
 	sf::Sprite skull;
 	skull.setTexture(it->second);
 	skull.setPosition(100,100);
 	_sprites.push_back(skull);
+	
+	// make a player object from skullman
+	_player = Player(skull);
 	
  }
  

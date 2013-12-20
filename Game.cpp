@@ -1,6 +1,6 @@
 /*
  *	Author: 	Cody Zornes
- *	Date: 		12/17/2013
+ *	Date: 		12/19/2013
  *	Version: 	3
  *	Desc:		Game object class implementation file
  */
@@ -12,6 +12,8 @@
 
  Game::Game()
  {
+	_exiting = false;
+	_currentState = NULL;
  }
  
  Game::~Game()
@@ -42,7 +44,7 @@
 	// Set first game state...
 	Uninitialized* unitState = new Uninitialized();
 	_gameStates.push_back(unitState);
-	_currentState = unitState;
+	ChangeState(_gameStates[0]);
 	
 	window.create(sf::VideoMode(_vidW, _vidH), "Game");
 	
@@ -76,8 +78,7 @@
 			}
 		}
 		
-		_currentState->drawScreen(&window);
-		window.display();
+		_currentState->drawScreen(window);
 	}
  }
  
@@ -92,11 +93,12 @@
  
 	// Check if current game state ptr is null (uninitialized)
 	if (_currentState != NULL) {
-		// Call Exit 
+		// Call Exit	
 		_currentState->Exit();
 	}
+
 	_currentState = newGameState;
-	
+
 	_currentState->Enter();
  }
  

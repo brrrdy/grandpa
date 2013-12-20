@@ -1,7 +1,7 @@
 /*
  *	Author: 	Cody Zornes
- *	Date: 		12/15/2013
- *	Version: 	2
+ *	Date: 		12/19/2013
+ *	Version: 	3
  *	Desc:		GameState class implementation file
  */
  
@@ -21,42 +21,31 @@
  
  void GameState::loadAssets(std::string filenames)
  {
-	// input file stream
+	// input file stream, open filenames file
 	std::ifstream gfxFiles(filenames.c_str());
 	
-	if (gfxFiles.is_open())
-	{
+	if (gfxFiles.is_open()) {
 		std::cout << "File opened for reading: " << filenames << std::endl;
 		
+		std::string tname, fname;
+		
 		// read until EOF
-		while (!gfxFiles.eof())
-		{
-			// get filename
-			std::string tname, fname;
-			if (gfxFiles >> tname >> fname >> std::ws)
-			{
-			
-				std::cout << "Loading file: " << fname << std::endl;
+		while (gfxFiles >> tname >> fname) {
+
+			std::cout << "Loading file: " << fname << std::endl;
 				
-				// attempt to create texture
-				sf::Texture newTexture;
-				if (!newTexture.loadFromFile(fname))
-				{
-					// err: file not found: fname!
-				}
-				else 
-				{
-					// add new texture to texture list
-					_textures.insert( std::pair<std::string, sf::Texture&>(tname, newTexture) );
-				}
-			}
-			else
-			{ 
-				// somethin f'd up
-				std::cout << "Cannot read: " << filenames << std::endl;
-			}
+			// attempt to create texture
+			sf::Texture newTexture;
 			
+			if (!newTexture.loadFromFile(fname)) {
+				// err: file not found: fname!
+			}
+			else {
+				// add new texture to texture list
+				_textures.insert( std::pair<std::string, sf::Texture&>(tname, newTexture) );
+			}
 		}
+
 	}
 	else
 		std::cout << "Cannot open file: "<< filenames << std::endl;
@@ -65,14 +54,21 @@
 	gfxFiles.close();
  }
  
- void GameState::drawScreen(sf::RenderWindow* window)
+ void GameState::drawScreen(sf::RenderWindow & window)
  {
-	std::map<std::string, sf::Sprite&>::iterator it;
+	window.clear();
+ 
+	// iterator for traversing sprites
+	std::vector<sf::Sprite>::iterator spriteIt = _sprites.begin();
 	
-	for (it = _sprites.begin(); it != _sprites.end(); ++it)
+	// draw all sprites to window
+	while ( spriteIt != _sprites.end() )
 	{
-		window->draw(it->second);
+		window.draw(*spriteIt);
+		spriteIt++;
 	}
+	
+	window.display();
  }
  
  std::string GameState::GetName()

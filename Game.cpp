@@ -19,17 +19,17 @@
 	ClearStates();
  }
  
- // rendering function to pass to other thread
+/*  // rendering function to pass to other thread
  void renderingThread(sf::RenderWindow* window)
  {
 	while(window->isOpen())
 	{
 		//draw stuff!
-		window.draw
+		state->drawScreen(window);
 		//end of frame
 		window->display();
 	}
- }
+ } */
  
  // Start - Initialize gameWindow and start the main game loop
  void Game::Start()
@@ -47,9 +47,9 @@
 	window.create(sf::VideoMode(_vidW, _vidH), "Game");
 	
 	// launch a rendering thread
-	window.setActive(false); // deactivate openGL context for multithreading
+	/* window.setActive(false); // deactivate openGL context for multithreading
 	sf::Thread thread(&renderingThread, &window);
-	thread.launch();
+	thread.launch(); */
 	
 	Game::Loop();
 	
@@ -75,6 +75,9 @@
 				Game::_exiting = true;
 			}
 		}
+		
+		_currentState->drawScreen(&window);
+		window.display();
 	}
  }
  

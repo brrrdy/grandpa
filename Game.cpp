@@ -38,15 +38,14 @@
  {
 	
 	// Start some stuff...
-	_vidW = 1024;
-	_vidH = 768;
+	_screenRect = sf::IntRect(0,0,1024,768);
 	
 	// Set first game state...
 	Uninitialized* unitState = new Uninitialized();
 	_gameStates.push_back(unitState);
 	ChangeState(_gameStates[0]);
 	
-	window.create(sf::VideoMode(_vidW, _vidH), "Game");
+	window.create(sf::VideoMode(_screenRect.width, _screenRect.height), "Game");
 	
 	// launch a rendering thread
 	/* window.setActive(false); // deactivate openGL context for multithreading
@@ -84,7 +83,7 @@
  
  int Game::BuildStates()
  {
-	// call script to just like make game here
+	// read data files to just like make game here
 	return 0;
  }
  

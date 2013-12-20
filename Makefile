@@ -29,4 +29,4 @@ $(EXECUTABLE) : $(OBJECTS)
 	$(CC) $(CFLAGS) $(INCFLAGS) $< -o $@
 	
 clean:
-	del $(EXECUTABLE).exe $(OBJECTS)
+	cmd /c del $(EXECUTABLE).exe $(OBJECTS)

@@ -65,6 +65,16 @@
 	gfxFiles.close();
  }
  
+ void GameState::drawScreen(sf::RenderWindow* window)
+ {
+	std::map<std::string, sf::Sprite&>::iterator it;
+	
+	for (it = _sprites.begin(); it != _sprites.end(); ++it)
+	{
+		window->draw(it->second);
+	}
+ }
+ 
  std::string GameState::GetName()
  {
 	return _name;

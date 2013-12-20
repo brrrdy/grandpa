@@ -22,6 +22,7 @@
 	virtual ~GameState();
  
 	void loadAssets(std::string filenames);
+	void drawScreen(sf::RenderWindow* window);
 	
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
@@ -30,6 +31,7 @@
 protected:
 	std::string _name;
 	std::map<std::string, sf::Texture&> _textures;
+	std::map<std::string, sf::Sprite&> _sprites;
 	
 	
  private:

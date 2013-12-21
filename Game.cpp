@@ -63,20 +63,18 @@
  // Loop - Run the main game loop while _exiting is false
  void Game::Loop()
  {
-	while (!Game::_exiting)
-	{
+	while (!Game::_exiting) {
 		// do stuff, yeah?
 		sf::Event event;
 		
 		// event handling logic
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-			{
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
 				Game::_exiting = true;
 			}
 		}
-		
+
+		_currentState->update(event);
 		_currentState->drawScreen(window);
 	}
  }

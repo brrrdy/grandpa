@@ -12,9 +12,9 @@
  }
  
  // construct player object from sf::Sprite
- Player::Player(sf::Sprite& sprite)
+ Player::Player(sf::Sprite& spriteIn)
  {
-	_playerSprite = sprite;
+	sprite = spriteIn;
  }
  
  Player::~Player()
@@ -22,25 +22,3 @@
 	// desctruct
  }
  
- void Player::update(sf::RenderWindow& window)
- {
-	const sf::FloatRect playerBounds = _playerSprite.getGlobalBounds();
-	const sf::Vector2u screenBounds = window.getSize();
- 
-	// Update player position
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && playerBounds.left > 0.0) {
-		_playerSprite.move(-0.05,0.0);
-	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && (playerBounds.left + playerBounds.width) < screenBounds.x) {
-		_playerSprite.move(0.05,0.0);
-	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && playerBounds.top > 0.0) {
-		_playerSprite.move(0.0,-0.05);
-	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && (playerBounds.top + playerBounds.height) < screenBounds.y) {
-		_playerSprite.move(0.0,0.05);
-	}
-	
-	// Draw player to screen
-	window.draw(_playerSprite);
- }

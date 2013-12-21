@@ -12,7 +12,9 @@
  
  GameState::GameState()
  {
+ 
 	_name = "generic";
+	_playerMovement = sf::Vector2f(0.0,0.0);
  }
  
  GameState::~GameState()
@@ -67,9 +69,34 @@
 		window.draw(*spriteIt);
 		spriteIt++;
 	}
+
+	// draw player
+	window.draw(_player.sprite);
 	
 	window.display();
  }
+ 
+ void GameState::update(sf::Event)
+ {
+	//const sf::FloatRect playerBounds = _player.sprite.getGlobalBounds();
+ 
+	// Update player position
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && _playerMovement.x > -.05 ){
+		_playerMovement.x -= .0001;
+	}
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && _playerMovement.x < .05 ) {
+		_playerMovement.x += .0001;
+	}
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && _playerMovement.y > -.05) {
+		_playerMovement.y -= .0001;
+	}
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && _playerMovement.y < .05) {
+		_playerMovement.y += .0001;
+	}
+	
+	_player.sprite.move(_playerMovement.x, _playerMovement.y);
+ }
+ 
  
  std::string GameState::GetName()
  {

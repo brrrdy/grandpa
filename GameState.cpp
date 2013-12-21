@@ -14,7 +14,7 @@
  {
  
 	_name = "generic";
-	_playerMovement = sf::Vector2f(0.0,0.0);
+	_playerV = sf::Vector2f(0.0,0.0);
  }
  
  GameState::~GameState()
@@ -81,21 +81,58 @@
 	//const sf::FloatRect playerBounds = _player.sprite.getGlobalBounds();
  
 	// Update player position
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && _playerMovement.x > -.05 ){
-		_playerMovement.x -= .0001;
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && _playerV.x > - 2.0 ){
+		_playerV.x -= .01;
 	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && _playerMovement.x < .05 ) {
-		_playerMovement.x += .0001;
+	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && _playerV.x < 2.0 ) {
+		_playerV.x += .01;
 	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && _playerMovement.y > -.05) {
-		_playerMovement.y -= .0001;
+	else if (_playerV.x > 0) {
+		_playerV.x -= .005;
 	}
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && _playerMovement.y < .05) {
-		_playerMovement.y += .0001;
+	else if (_playerV.x < 0) {
+		_playerV.x += .005;
 	}
 	
-	_player.sprite.move(_playerMovement.x, _playerMovement.y);
+	
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && _playerV.y > -2.0) {
+		_playerV.y -= .01;
+	}
+	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && _playerV.y < 2.0) {
+		_playerV.y += .01;
+	}
+	else if (_playerV.y > 0) {
+		_playerV.y -= .005;
+	}
+	else if (_playerV.y < 0) {
+		_playerV.y += .005;
+	}
+	
+	if (_playerV.x < .005 && _playerV.x > -.005) {
+		_playerV.x = 0.0;
+	}
+	if (_playerV.y < .005 && _playerV.y > -.005) {
+		_playerV.y = 0.0;
+	}
+
+	_player.sprite.move(_playerV.x, _playerV.y);
+	
+	if (colliding(_player.sprite)) {
+		
+	}
  }
+ 
+ bool GameState::colliding(sf::Sprite & sprite)
+ {
+	std::vector<sf::Sprite>::iterator spriteIt;
+	for (spriteIt = _sprites.begin(); spriteIt != _sprites.end(); ++spriteIt) {
+		if (sprite.getGlobalBounds().intersects(spriteIt->getGlobalBounds())) {
+			return true;
+		}
+	}
+	return false;
+ }
+ 
  
  
  std::string GameState::GetName()

@@ -115,11 +115,13 @@
 		_playerV.y = 0.0;
 	}
 
+	if (colliding(_player.sprite)) {
+		_playerV.x = -_playerV.x;
+		_playerV.y = -_playerV.y;
+	}
+	
 	_player.sprite.move(_playerV.x, _playerV.y);
 	
-	if (colliding(_player.sprite)) {
-		
-	}
  }
  
  bool GameState::colliding(sf::Sprite & sprite)

@@ -79,56 +79,101 @@
  void GameState::update(sf::Event)
  {
 	//const sf::FloatRect playerBounds = _player.sprite.getGlobalBounds();
- 
-	// Update player position
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && _playerV.x > - 2.0 ){
-		_playerV.x -= .01;
-	}
-	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && _playerV.x < 2.0 ) {
-		_playerV.x += .01;
-	}
-	else if (_playerV.x > 0) {
-		_playerV.x -= .005;
-	}
-	else if (_playerV.x < 0) {
-		_playerV.x += .005;
-	}
 	
+ 	// collision detection algorithm
+	// If sprites are colliding (overlapping) eject the sprites from each other
+	// adjust velocity of moving player proportional to a vector between the two sprite's centers
+	sf::Sprite collided;
+	sf::FloatRect overlap;
+	if (colliding(_player.sprite, collided, overlap)) {
 	
-	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && _playerV.y > -2.0) {
-		_playerV.y -= .01;
-	}
-	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && _playerV.y < 2.0) {
-		_playerV.y += .01;
-	}
-	else if (_playerV.y > 0) {
-		_playerV.y -= .005;
-	}
-	else if (_playerV.y < 0) {
-		_playerV.y += .005;
-	}
-	
-	if (_playerV.x < .005 && _playerV.x > -.005) {
-		_playerV.x = 0.0;
-	}
-	if (_playerV.y < .005 && _playerV.y > -.005) {
-		_playerV.y = 0.0;
+		float xPen = overlap.width;
+		float yPen = overlap.height;
+		
+		// penetration correction offset - added onto value of penetration correction
+		float pcOffset = 1.0;
+		// velocity multiplier - "bounciness" of sprite collision
+		float vMult = 0.1;
+		
+		// eject sprites from each other
+		if (xPen < yPen) {
+			// eject on x axis
+			if (_playerV.x >= 0.0) 
+				xPen = -xPen-pcOffset;
+			else
+				xPen += pcOffset;
+			
+			// move sprite and adjust velocity
+			_player.sprite.move (xPen, 0.0);
+			_playerV.x += xPen * vMult;
+		}
+		else {
+			// eject on y axis
+			if (_playerV.y >= 0.0) 
+				yPen = -yPen-pcOffset;
+			else
+				yPen += pcOffset;
+
+			// move sprite and adjust velocity
+			_player.sprite.move (0.0, yPen);
+			_playerV.y += yPen * vMult;
+		}
+
+		std::cout << "Collision occuring at (" << overlap.left << ", " << overlap.top << ") by " << overlap.width << " and " << overlap.height << std::endl; 
+
+	} // if no collision, process keyboard input
+	else {
+		// Poll keyboard for input
+		checkPlayerInput();
 	}
 
-	if (colliding(_player.sprite)) {
-		_playerV.x = -_playerV.x;
-		_playerV.y = -_playerV.y;
-	}
-	
 	_player.sprite.move(_playerV.x, _playerV.y);
 	
  }
  
- bool GameState::colliding(sf::Sprite & sprite)
+ void GameState::checkPlayerInput()
+ {
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Left) && _playerV.x > - 2.0 ){
+		_playerV.x -= .05;
+	}
+	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Right) && _playerV.x < 2.0 ) {
+		_playerV.x += .05;
+	}
+	else if (_playerV.x > 0) {
+		_playerV.x -= .01;
+	}
+	else if (_playerV.x < 0) {
+		_playerV.x += .01;
+	}
+	
+	
+	if (sf::Keyboard::isKeyPressed (sf::Keyboard::Up) && _playerV.y > -2.0) {
+		_playerV.y -= .05;
+	}
+	else if (sf::Keyboard::isKeyPressed (sf::Keyboard::Down) && _playerV.y < 2.0) {
+		_playerV.y += .05;
+	}
+	else if (_playerV.y > 0) {
+		_playerV.y -= .01;
+	}
+	else if (_playerV.y < 0) {
+		_playerV.y += .01;
+	}
+	
+	if (_playerV.x < .01 && _playerV.x > -.01) {
+		_playerV.x = 0.0;
+	}
+	if (_playerV.y < .01 && _playerV.y > -.01) {
+		_playerV.y = 0.0;
+	}
+ }
+ 
+ bool GameState::colliding(sf::Sprite & sprite, sf::Sprite & collided, sf::FloatRect & overlap)
  {
 	std::vector<sf::Sprite>::iterator spriteIt;
 	for (spriteIt = _sprites.begin(); spriteIt != _sprites.end(); ++spriteIt) {
-		if (sprite.getGlobalBounds().intersects(spriteIt->getGlobalBounds())) {
+		if (sprite.getGlobalBounds().intersects(spriteIt->getGlobalBounds(), overlap)) {
+			collided = *spriteIt;
 			return true;
 		}
 	}
